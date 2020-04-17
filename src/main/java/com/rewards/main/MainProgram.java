@@ -12,8 +12,9 @@ public class MainProgram {
 		
 		try(Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Please select option :");
-			System.out.println("0. Display all Customers Rewards");
-			System.out.println("1. Display Selected Customer Rewards");
+			System.out.println("1. Display all Customers Rewards");
+			System.out.println("2. Display all Customers Rewards in batch mode.");
+			System.out.println("3. Display Selected Customer Rewards");
 			
 			
 			String option = scanner.nextLine();
@@ -21,16 +22,16 @@ public class MainProgram {
 			RewardsService rewardsService = new RewardsService();
 			
 			switch(option) {
-			  case "0" : { rewardsService.calculateTotalRewardsInBatchMode(2); rewardsService.showTotalRewards(); } break;
-			  case "1" : {
+			  case "1" : { rewardsService.calculateTotalRewards(); rewardsService.showTotalRewards(); } break;
+			  case "2" : { 
+				  System.out.println("Please enter the batch size.");
+				  rewardsService.calculateTotalRewardsInBatchMode(collectInput()); 
+				  rewardsService.showTotalRewards(); 
+			  } 
+			  break;
+			  case "3" : {
 				  System.out.println("Please enter the customer Id.");
-				  int custId = 0;
-				  try { custId = Integer.parseInt(scanner.nextLine()); } 
-				  catch (NumberFormatException e) { 
-					  System.out.println("Invalid Customer Id, Exiting the program.");
-					  System.exit(0);
-				  }				  
-				  rewardsService.calculateCustomerRewards(custId);
+				  rewardsService.calculateCustomerRewards(collectInput());
 			  }
 			  break;
 			  default : System.out.println("Wrong Option, Exiting the program.");
@@ -39,6 +40,17 @@ public class MainProgram {
 		} catch (ParseException | NumberFormatException | FileNotFoundException e) {			
 			e.printStackTrace();
 		}
+	}
+	
+	private static int collectInput() {		
+		int input = 0;
+		try(Scanner scanner = new Scanner(System.in)) {  input = Integer.parseInt(scanner.nextLine()); } 
+		  catch (NumberFormatException e) { 
+			  System.out.println("Invalid input, Exiting the program.");
+			  System.exit(0);
+		  }	
+		return input;
+		
 	}
 
 }
